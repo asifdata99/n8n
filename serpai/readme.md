@@ -1,5 +1,4 @@
 # n8n-serpai
-Of course! Here is a README.md file based on the provided n8n project image.
 
 n8n AI Agent with SerpAPI & Calculator
 
