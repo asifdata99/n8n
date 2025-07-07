@@ -1,166 +1,83 @@
-{
-  "name": "serp_AI",
-  "nodes": [
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
-      "typeVersion": 1.1,
-      "position": [
-        -460,
-        -40
-      ],
-      "id": "4724f322-00f4-4f49-90c7-778dc23ff353",
-      "name": "When chat message received",
-      "webhookId": "227dd2ec-8a0c-49d0-90c8-73a7608b6310"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 2,
-      "position": [
-        -240,
-        -40
-      ],
-      "id": "0f8f02b9-6421-4dc0-ae3f-a5df46c16f19",
-      "name": "AI Agent"
-    },
-    {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "mode": "list",
-          "value": "gpt-4.1-mini"
-        },
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        -380,
-        180
-      ],
-      "id": "883ec009-975d-4eb6-b399-6450f39aad08",
-      "name": "OpenAI Chat Model",
-      "credentials": {
-        "openAiApi": {
-          "id": "PyKbcxemsQS9p6fK",
-          "name": "OpenAi account"
-        }
-      }
-    },
-    {
-      "parameters": {},
-      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
-      "typeVersion": 1.3,
-      "position": [
-        -240,
-        200
-      ],
-      "id": "03be5a80-6f7c-4a3a-b6d0-6a57cf30336c",
-      "name": "Simple Memory"
-    },
-    {
-      "parameters": {},
-      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
-      "typeVersion": 1,
-      "position": [
-        40,
-        180
-      ],
-      "id": "cb2cabb0-4c4a-4cef-9d7c-052b0dbbc868",
-      "name": "Calculator"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
-      "typeVersion": 1,
-      "position": [
-        -80,
-        180
-      ],
-      "id": "bd9f2169-ef7a-41fe-80a7-c95576ab0170",
-      "name": "SerpAPI",
-      "credentials": {
-        "serpApi": {
-          "id": "QdiR4tnJK1Wm3FXE",
-          "name": "SerpAPI account"
-        }
-      }
-    }
-  ],
-  "pinData": {},
-  "connections": {
-    "When chat message received": {
-      "main": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenAI Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Simple Memory": {
-      "ai_memory": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_memory",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Calculator": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "SerpAPI": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    }
-  },
-  "active": true,
-  "settings": {
-    "executionOrder": "v1"
-  },
-  "versionId": "f031028b-282d-4898-b5c9-cca87779cb1f",
-  "meta": {
-    "templateCredsSetupCompleted": true,
-    "instanceId": "c4df53ec0ad3857d58b51b16900d13f108eb6c4ecbc4f40b2d880654c802c643"
-  },
-  "id": "VgsZjoF9K9bx2lOD",
-  "tags": []
-}
+# n8n-serpai
+
+
+n8n AI Agent with SerpAPI & Calculator
+
+This n8n project demonstrates how to build a powerful and extensible conversational AI agent. The agent can understand user queries in a chat interface, use external tools to fetch real-time information or perform calculations, and maintain conversation history to provide contextual responses.
+
+The example in the screenshot shows the agent responding to a query about the weather in Toronto by using the SerpAPI tool to look up the live forecast.
+
+Key Features
+
+Conversational Interface: Start the workflow and interact with it through a simple chat UI.
+
+LLM-Powered Core: Leverages an OpenAI Chat Model as the "brain" for natural language understanding and response generation.
+
+Tool Usage: The agent is equipped with tools to extend its capabilities beyond its training data.
+
+SerpAPI: To search the web for real-time, up-to-date information (e.g., weather, news, stock prices).
+
+Calculator: To perform mathematical calculations.
+
+Conversation Memory: Utilizes a Simple Memory node to remember previous parts of the conversation, allowing for contextual follow-up questions.
+
+Extensible: Easily add more tools to the AI Agent to give it new abilities.
+
+Workflow Breakdown
+
+When chat message received (Trigger): This trigger node initiates the workflow whenever a user sends a message in the chat panel. It captures the user's input.
+
+AI Agent: This is the central orchestrator of the workflow. It receives the user's message from the trigger and decides the best course of action. It coordinates between the language model, memory, and the available tools.
+
+OpenAI Chat Model: Connected to the Chat Model input of the agent, this node acts as the "brain". It processes the user's query, determines their intent, and formulates the final text response.
+
+Simple Memory: Connected to the Memory input, this node stores the history of the chat session. This allows the agent to understand context from previous messages.
+
+SerpAPI & Calculator (Tools): These nodes are connected to the Tool input of the agent. The agent can choose to use one of these tools if the user's query requires it. For example, it will use SerpAPI for a question about current events and Calculator for a math problem.
+
+Nodes Used
+
+When chat message received
+
+AI Agent
+
+OpenAI Chat Model
+
+Simple Memory
+
+SerpAPI
+
+Calculator
+
+Prerequisites
+
+To run this workflow, you will need:
+
+An active n8n instance.
+
+OpenAI API Credentials: You must configure the OpenAI Chat Model node with your API key.
+
+SerpAPI API Credentials: You must configure the SerpAPI node with your API key.
+
+How to Use
+
+Import the workflow into your n8n instance.
+
+Set up your credentials for the OpenAI Chat Model and SerpAPI nodes.
+
+Activate the workflow using the "Inactive" toggle at the top of the screen.
+
+Open the chat interface by clicking on the When chat message received node.
+
+Start asking questions!
+
+Example Queries:
+
+what is the weather forecast for tomorrow in Toronto?
+
+What is the capital of Australia?
+
+what is 125 multiplied by 42?
+![Screenshot 2025-07-05 234620](https://github.com/user-attachments/assets/224835ee-13e0-4cc8-b1e5-b5eaef95206e)
+
+
